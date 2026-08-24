@@ -1,21 +1,22 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 import { useAuth } from './AuthContext.jsx';
+import { Login } from './components/Login.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
-  const { user, login } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
 
-  return (
+  return isAuthenticated ? (
     <div>
-      <button onClick={() => login('admin', 'safegauge', true)}>Login</button>
-      <p>{JSON.stringify(user)}</p>
+      <p>Welcome, {user.username} ({user.role})</p>
+      <button onClick={logout}>Logout</button>
     </div>
-    
-  )
+  ) : (
+    <Login />
+  );
 }
 
-export default App
+export default App;
+
+
+
