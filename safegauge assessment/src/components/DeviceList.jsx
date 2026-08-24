@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext.jsx';
 import { api } from '../Util/apiClient.js';
+import { DeviceForm } from './DeviceForm.jsx';
 
 export function DeviceList(){
     const {token} = useAuth();
@@ -24,11 +25,21 @@ export function DeviceList(){
         }
     };
 
+    const handleCreated = (newDevice) => {
+        setDevice((prev) => [...prev, newDevice]);
+    };
+
     if (loading) return <p>Loading devices...</p>;
     if (error) return <p style={{ color: 'red' }}>{error}</p>
-    if (devices.length === 0) return <p>No devices yet.</p>;
 
     return (
+        <div>
+            <DeviceForm onCreated={handleCreated} />
+
+            {devices.length === 0 ? (
+                <p>No devics yet.</p>
+            ): (
+    
         <ul>
             {devices.map((device) => (
             <li key={device.id}> 
@@ -37,6 +48,8 @@ export function DeviceList(){
             </li>
             ))}
         </ul>
+            )}
+        </div>
     );
 
 }
