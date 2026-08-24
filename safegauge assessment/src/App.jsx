@@ -10,6 +10,7 @@ function App() {
     <div>
       <p>Welcome, {user.username} ({user.role})</p>
       <button onClick={logout}>Logout</button>
+      <DeviceList />
     </div>
   ) : (
     <Login />
