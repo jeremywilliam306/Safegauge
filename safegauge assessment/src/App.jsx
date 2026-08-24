@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { useAuth } from './AuthContext.jsx';
 import { Login } from './components/Login.jsx';
+import { DeviceList } from './components/DeviceList.jsx';
 
 function App() {
   const { isAuthenticated, user, logout } = useAuth();
