@@ -55,4 +55,45 @@ export const api =
             }
         },
     },
+
+    rules: {
+        list: async (token, deviceId) => {
+            try{
+                return await Api.rules.list(token, deviceId);
+            }
+            catch (error) {
+                if (error.status === 401) {
+                    onUnauthorized();
+                }
+                throw error;
+            }
+        },
+
+        create: async (token, body) => {
+            try {
+                return await Api.rules.create(token, body);
+            } catch (error) {
+                if (error.status === 401) onUnauthorized();
+                throw error;
+            }
+        },
+
+        update: async (token, id, patch) => {
+            try {
+                return await Api.rules.update(token, id, patch);
+            } catch (error) {
+                if (error.status === 401) onUnauthorized();
+                throw error;
+            }
+        },
+
+        remove: async (token, id) => {
+            try {
+                return await Api.rules.remove(token, id);
+            } catch (error) {
+                if (error.status === 401) onUnauthorized();
+                throw error;
+            }
+        }
+    }
 };

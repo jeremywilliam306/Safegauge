@@ -40,3 +40,22 @@ Demo accounts:
 
 I Used Claude as a coding tutor, however, i wrote the codes myself. I used them mainly as a debugging partner and to explain React/JS concepts I was learning as I went (useState, useEffect, controlled inputs, promise handling). I wrote the code myself, Claude pointed out bugs (missing braces, typos, wrong import paths, mismatched variable names) and explained why they were wrong rather than just fixing them for me. I made lots of mistakes myself. I also used it to double check my work with the actual API docs. Tried to understand every mistake and things that I wasn't sure at along the way aswell.
 
+
+
+
+
+
+## firmwareVersion and subscribeAll/calibrationId for trade-offs
+- **The docs don't always match the real code, in a few places.** I
+  found this by actually reading the source, not just the comment
+  blocks at the top of each file:
+  - `mock-api.js` says a Device has a `firmwareVersion` field, but
+    the real code that creates a device never sets it.
+  - `sensor-sdk.min.js` advertises a `subscribeAll` method and a
+    `calibrationId` on each reading — neither exists in the real
+    code.
+  - `mock-api.js` also documents an `Api.rules.bulkCreate` method
+    that isn't implemented either.
+  
+  I didn't build against any of these, and left them out of the UI
+  rather than showing broken placeholders.
