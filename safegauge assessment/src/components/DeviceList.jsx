@@ -3,7 +3,8 @@ import { useAuth } from '../AuthContext.jsx';
 import { api } from '../Util/apiClient.js';
 import { DeviceForm } from './DeviceForm.jsx';
 
-export function DeviceList(){
+
+export function DeviceList({ onSelect }){
     const {token} = useAuth();
     const [devices, setDevice] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -37,14 +38,14 @@ export function DeviceList(){
             <DeviceForm onCreated={handleCreated} />
 
             {devices.length === 0 ? (
-                <p>No devics yet.</p>
+                <p>No devices yet.</p>
             ): (
     
         <ul>
             {devices.map((device) => (
-            <li key={device.id}> 
+            <li key={device.id} onClick={() => onSelect(device)}>
             {device.name} - {device.site} ({device.sensorCount} sensors)
-            <button onClick={() => handleDelete(device.id)}>Delete</button>
+            <button onClick={(e) => { e.stopPropagation(); handleDelete(device.id); }}>Delete</button>
             </li>
             ))}
         </ul>
