@@ -9,12 +9,13 @@ export function DeviceList({ onSelect }){
     const [devices, setDevice] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [editingDevice, setEditingDevice] = useState(null);
 
     useEffect(() => {
         api.devices.list(token)
-        .then(setDevice)
-        .catch((err) => setError(err.message))
-        .finally(() => setLoading(false));
+            .then(setDevice)
+            .catch((err) => setError(err.message))
+            .finally(() => setLoading(false));
     }, [token]);
 
     const handleDelete = async (id) =>{
@@ -26,8 +27,14 @@ export function DeviceList({ onSelect }){
         }
     };
 
-    const handleCreated = (newDevice) => {
-        setDevice((prev) => [...prev, newDevice]);
+    const handleSaved = (saved) => {
+        setDevice((prev) => {
+            const exists = prev.some((d) => d.id === saved.id);
+            return exists
+                ? prev.map((d) => (d.id === saved.id ? saved : d))
+                : [...prev, saved];
+        });
+        setEditingDevice(null);
     };
 
     if (loading) return <p>Loading devices...</p>;
@@ -35,7 +42,11 @@ export function DeviceList({ onSelect }){
 
     return (
         <div>
-            <DeviceForm onCreated={handleCreated} />
+            <DeviceForm 
+                onSaved={handleSaved} 
+                editingDevice={editingDevice}
+                onCancelEdit={() => setEditingDevice(null)}
+            />
 
             {devices.length === 0 ? (
                 <p>No devices yet.</p>
@@ -45,6 +56,7 @@ export function DeviceList({ onSelect }){
             {devices.map((device) => (
             <li key={device.id} onClick={() => onSelect(device)}>
             {device.name} - {device.site} ({device.sensorCount} sensors)
+            <button onClick={(e) => { e.stopPropagation(); setEditingDevice(device); }}>Edit</button>
             <button onClick={(e) => { e.stopPropagation(); handleDelete(device.id); }}>Delete</button>
             </li>
             ))}
