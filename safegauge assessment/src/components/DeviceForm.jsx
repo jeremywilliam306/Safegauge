@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext.jsx';
 import { api } from '../Util/apiClient.js';
 
-export function DeviceForm ({onCreated}) {
+export function DeviceForm ({onSaved, editingDevice, onCancelEdit}) {
     const { token } = useAuth();
     const [name, setName] = useState ('');
     const [site, setSite] = useState ('');
@@ -11,24 +11,40 @@ export function DeviceForm ({onCreated}) {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        if (editingDevice) {
+            setName(editingDevice.name);
+            setSite(editingDevice.site);
+            setSensorCount(String(editingDevice.sensorCount));
+        } else {
+            setName('');
+            setSite('');
+            setSensorCount('');
+        }
+        setFieldErrors({});
+        setError(null);
+    }, [editingDevice]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
         setFieldErrors({});
 
-        try {
-            const newDevice = await api.devices.create (token, {
-                name,
-                site,
-                sensorCount: Number(sensorCount),
-            });
+        const body = { name, site, sensorCount: Number(sensorCount) };
+       
+       try {
+        const saved = editingDevice
+            ? await api.devices.update(token, editingDevice.id, body)
+            : await api.devices.create(token, body);
 
-            onCreated (newDevice);
+        onSaved(saved);
 
+        if (!editingDevice) {
             setName('');
             setSite('');
             setSensorCount('');
+            }
         }   catch (err) {
             if (err.status === 422) {
                 setFieldErrors(err.body);
@@ -68,8 +84,11 @@ export function DeviceForm ({onCreated}) {
         
 
         <button type="submit" disabled={loading}>
-            {loading ? 'Adding...' : 'Add device'}
+            {loading ? 'Saving...' : editingDevice ? 'Save changes' : 'Add device'}
         </button>
+        {editingDevice && (
+            <button type="button" onClick={onCancelEdit}>Cancel</button>
+        )}
         </form>
     );
 }
