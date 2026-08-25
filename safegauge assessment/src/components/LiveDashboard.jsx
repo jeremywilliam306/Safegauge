@@ -6,6 +6,9 @@ export function LiveDashboard({ device }) {
     const [status, setStatus] = useState('disconnected');
 
     useEffect(() => {
+        setReadings({});
+        setStatus('disconnected');
+
         const hub = window.SensorHub.connect({
             sensors: device.sensorCount,
             channelKey: 'demo',
