@@ -1,4 +1,4 @@
-export function sensorsIdsForCount(count) {
+export function sensorIdsForCount(count) {
     const ids = [];
     for (let i = 0; i < count; i++) {
         const prefix = i % 2 === 0 ? 'PT' : 'TT';

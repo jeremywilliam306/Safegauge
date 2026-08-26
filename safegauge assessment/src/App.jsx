@@ -4,7 +4,7 @@ import { useAuth } from './AuthContext.jsx';
 import { Login } from './components/Login.jsx';
 import { DeviceList } from './components/DeviceList.jsx';
 import { LiveDashboard } from './components/LiveDashboard.jsx';
-import { RulesPanel } from './components/RulesPanel.jsx';
+import { RulesPanel } from './Util/RulesPanel.jsx';
 
 function App() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -19,8 +19,21 @@ function App() {
 
       {selectedDevice && (
         <div>
-          <button onClick={() => setActiveTab('live')}>Live dashboard</button>
-          <button onClick={() => setActiveTab('rules')}>Alert rules</button>
+          <div className="tab-bar">
+            <button
+              className={activeTab === 'live' ? 'active' : ''}
+              onClick={() => setActiveTab('live')}
+            >
+              Live dashboard
+            </button>
+
+            <button 
+              className={activeTab === 'rules' ? 'active' : ''}
+              onClick={() => setActiveTab('rules')}
+            >
+              Alert rules
+            </button>
+          </div>
         
           {activeTab === 'live' && <LiveDashboard device={selectedDevice} />}
           {activeTab === 'rules' && <RulesPanel device={selectedDevice} />}

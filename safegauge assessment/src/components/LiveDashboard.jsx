@@ -29,12 +29,15 @@ export function LiveDashboard({ device }) {
 
     return (
         <div>
-            <p>Status: {status}</p>
-            {Object.values(readings).map((r) => (
-                <p key={r.sensorId}>
-                    {r.sensorId} ({r.type}): {r.value} {r.unit}
-                </p>
-            ))}
+            <p className="status">Status: {status}</p>
+            <div className="sensor-grid">
+                {Object.values(readings).map((r) => (
+                    <div key={r.sensorId} className="sensor-tile">
+                        <div>{r.sensorId} ({r.type})</div>
+                        <div className="value">{r.value} {r.unit}</div>
+                    </div>
+             ))}
+             </div>
         </div>
     );
 }

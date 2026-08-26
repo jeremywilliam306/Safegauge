@@ -13,7 +13,7 @@ export function RulesPanel({ device }) {
     const [op, setOp] = useState('>');
     const [threshold, setThreshold] = useState('');
     const [severity, setSeverity] = useState('warn');
-    const [FieldErrors, setFieldErrors] = useState({});
+    const [fieldErrors, setFieldErrors] = useState({});
     const [formError, setFormError] = useState(null);
     const [saving, setSaving] = useState(false);
 
@@ -75,7 +75,7 @@ export function RulesPanel({ device }) {
             {rules.length === 0 ? (
                 <p>No rules yet.</p>
             ):(
-                <ul> 
+                <ul className="rules-list"> 
                     {rules.map((rule) => (
                         <li key={rule.id}>
                             {rule.sensorId} {rule.op} {rule.threshold} ({rule.severity})
@@ -85,18 +85,18 @@ export function RulesPanel({ device }) {
                 </ul>
             )}
 
-            <form onSubmit={handleSUbmit}>
+            <form onSubmit={handleSubmit}>
                 <select value={sensorId} onChange={(e) => setSensorId(e.target.value)} required>
                     <option value="">Select a sensor...</option>
                     {sensorOptions.map((id) => (
                         <option key={id} value={id}>{id}</option>
                     ))}
                 </select>
-                {FieldErrors.sensorId && <p style={{ color: 'red'}}>{FieldErrors.sensorId}</p>}
+                {fieldErrors.sensorId && <p style={{ color: 'red'}}>{fieldErrors.sensorId}</p>}
 
                 <select value={op} onChange={(e) => setOp(e.target.value)}>
-                    <option value=">">gt;</option>
-                    <option value="<">gt;</option>
+                    <option value=">">&gt;</option>
+                    <option value="<">&lt;</option>
                 </select>
 
                 <input
@@ -105,7 +105,7 @@ export function RulesPanel({ device }) {
                     value={threshold}
                     onChange={(e) => setThreshold(e.target.value)}
                 />
-                {FieldErrors.threshold && <p style={{ color: 'red' }}>{FieldErrors.threshold}</p>}
+                {fieldErrors.threshold && <p style={{ color: 'red' }}>{fieldErrors.threshold}</p>}
 
                 <select value={severity} onChange={(e) => setSeverity(e.target.value)}>
                     <option value="warn">Warn</option>

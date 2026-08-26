@@ -52,9 +52,9 @@ export function DeviceList({ onSelect }){
                 <p>No devices yet.</p>
             ): (
     
-        <ul>
+        <ul className="device-list">
             {devices.map((device) => (
-            <li key={device.id} onClick={() => onSelect(device)}>
+            <li key={device.id} className="device-card" onClick={() => onSelect(device)}>
             {device.name} - {device.site} ({device.sensorCount} sensors)
             <button onClick={(e) => { e.stopPropagation(); setEditingDevice(device); }}>Edit</button>
             <button onClick={(e) => { e.stopPropagation(); handleDelete(device.id); }}>Delete</button>
